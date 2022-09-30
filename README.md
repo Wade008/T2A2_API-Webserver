@@ -94,7 +94,42 @@ Please note, this ERD can also be accessed online here: https://lucid.app/lucidc
 
 ## R7 Detail any third party services that your app will use.  
 
-<!-- list external data sources here -->
+The recipe app uses data from two third party services including:
+
+- The list of recipe categories obtained from (Myfoodbook.com.au, 2022).  
+
+- The list of ingredients obtained from (Alexandra, 2018). 
+
+The app also uses the following packages: 
+
+- autopep8==1.7.0
+- bcrypt==4.0.0
+- click==8.1.3- 
+- Flask==2.2.2
+- Flask-Bcrypt==1.0.1
+- Flask-JWT-Extended==4.4.4
+- flask-marshmallow==0.14.0
+- Flask-SQLAlchemy==2.5.1
+- greenlet==1.1.3
+- itsdangerous==2.1.2
+- Jinja2==3.1.2
+- MarkupSafe==2.1.1
+- marshmallow==3.18.0
+- marshmallow-sqlalchemy==0.28.1
+- numpy==1.23.3
+- packaging==21.3
+- pandas==1.4.4
+- psycopg2-binary==2.9.3
+- pycodestyle==2.9.1
+- pyJWT==2.4.0
+- pyparsing==3.0.9
+- python-dateutil==2.8.2
+- python-dotenv==0.21.0
+- pytz==2022.2.1
+- six==1.16.0
+- SQLAlchemy==1.4.41
+- toml==0.10.2
+- Werkzeug==2.2.2
 
 
 
@@ -128,9 +163,27 @@ The Recipe model also represents a child object that is related to the User and 
 
  The User model represents a parent object related to children models, Recipe and Rating. 
 
-- As mentioned above, the User model has a one-to-many relationship with the Recipe model. 
+- As mentioned above, the User model has a one-to-many relationship with the Recipe model. Importantly, if a user is deleted then the associated Recipe objects also need to be deleted. 
+
+- There can be many Rating objects associated with the User model. If a User object is deleted, then all associated Rating objects will be deleted.
+
+### Rating model  
+
+The Rating model represents a child in relation to the Recipe and User models. This model forms a linking object between the User and Recipe models to manage the many-many relationship between the Recipe and User models. A rating can be deleted and will have no impact on the User and Recipe models.
+
+### Ingredient  
+
+The Ingredient model is a parent to the IngredientList model. That is, one-to-many relationship between the Ingredient and IngredientList models. If an ingredient is removed from the Ingredient model, it will cascade to delete all associated IngredientList objects. 
 
 
+### IngredientList model  
+
+The IngredientList model represents a child object in relation to the Recipe and Ingredient models. An IngredientList onject can be removed from the model without impacting the related Parent objects. This model forms a linking object between the Recipe and Ingredient models to manage the many-many relationship between the Recipe and Ingredient models.  
+
+
+### Category model   
+
+As mentioned before, the Category model is a parent object to the Recipe object. A Category object can be deleted without impacting the related Recipe object, as a Recipe object can exist without an associated Category object.
 
 
 
@@ -149,6 +202,8 @@ The Recipe model also represents a child object that is related to the User and 
 <hr>  
 
 
+
+## References  
 
 
 
