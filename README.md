@@ -135,17 +135,33 @@ The app also uses the following packages:
 
 ## R8 Describe your projects models in terms of the relationships they have with each other.
 
-The recipe API has the following models:
+The recipe API has the following entities:
 
 - Recipe  
 - User  
-- Rating  
-- Ingredient  
-- IngredientList  
+- Ingredient 
 - Category  
 
+The API also requires the following linking tables
 
-### Recipe model 
+- Ingredient_list
+- Rating
+
+
+### Relationships
+
+- A Recipe requires many ingredients. 
+- An Ingredient can have many recipes associated with it.
+- A Recipe can only have one category associated with it.
+- A Category can have many recipes associated with it.
+- A User can post many recipes.
+- A User can rate many recipes, while a recipe can have many ratings.
+
+The many-to-many relationship between the Recipe and Ingredient objects is addressed by using a linking table, Ingredient_list. And the many-to-many relationship between the Recipe and User objects in relation to ratings is addressed by using a linking table, Rating. This is addressed further in R9 below.
+
+Each object is addresses in more detail below.
+
+#### Recipe
 
 The API's Recipe model represents a parent object that is related to children models, IngredientList and Rating. 
 
@@ -159,7 +175,7 @@ The Recipe model also represents a child object that is related to the User and 
 
  - There can be many User objects related to one Category object. A Recipe object can be deleted without needing to remove the associated Category object. However, if a Category object is deleted, then the associated Recipe object can remain as it is not necessary for the Recipe object to have a Category linked to it.  
 
- ### User model  
+ #### User model  
 
  The User model represents a parent object related to children models, Recipe and Rating. 
 
@@ -167,21 +183,21 @@ The Recipe model also represents a child object that is related to the User and 
 
 - There can be many Rating objects associated with the User model. If a User object is deleted, then all associated Rating objects will be deleted.
 
-### Rating model  
+#### Rating model  
 
 The Rating model represents a child in relation to the Recipe and User models. This model forms a linking object between the User and Recipe models to manage the many-many relationship between the Recipe and User models. A rating can be deleted and will have no impact on the User and Recipe models.
 
-### Ingredient  
+#### Ingredient  
 
 The Ingredient model is a parent to the IngredientList model. That is, one-to-many relationship between the Ingredient and IngredientList models. If an ingredient is removed from the Ingredient model, it will cascade to delete all associated IngredientList objects. 
 
 
-### IngredientList model  
+#### IngredientList model  
 
 The IngredientList model represents a child object in relation to the Recipe and Ingredient models. An IngredientList onject can be removed from the model without impacting the related Parent objects. This model forms a linking object between the Recipe and Ingredient models to manage the many-many relationship between the Recipe and Ingredient models.  
 
 
-### Category model   
+#### Category model   
 
 As mentioned before, the Category model is a parent object to the Recipe object. A Category object can be deleted without impacting the related Recipe object, as a Recipe object can exist without an associated Category object.
 
@@ -190,7 +206,26 @@ As mentioned before, the Category model is a parent object to the Recipe object.
 <hr>  
 
 ## R9 Discuss the database relations to be implemented in your application.
-<!-- Refer to the ERD and discuss using one to many language -->
+
+The recipe application database relationships are outlined below.
+
+As previously mentioned, the application's database is comprised on six tables. These include:
+
+- Recipes 
+- Users  
+- Ratings 
+- Ingredient_list
+- Ingredients 
+- Categories 
+
+The application effectively centres around the recipes table, which has the following implemented relationships:  
+
+- Users and recipes: The users table is associated with the recipe table in a one-to-many relationship, That primary key of the users tables is represented as a foreign key in the recipes table. This foreign key constraint is required (cannot be null) as a recipe must be owned by a user. If a user is removed from the system the associated recipes must also be removed. 
+- Ratings and recipes: The ratings table represents a linking table between recipes and users. A recipe can have many ratings and therefore the recipes table primary key is represented as a foreign key on the ratings table, with this key required (not nullable). A rating can be removed without affecting the recipes tables. 
+- Ratings and Users: Only users can rate a recipe and as such a relationship between users and ratings has been implemented in a one-to-many fashion. That is, the primary key from the users table is a foreign key constraint on the ratings table and again this is not nullable. If a user is removed from the system, then the associated ratings must also be removed. 
+- Recipes and ingredient_list: The ingredient_list table represents a linking table between the recipes and ingredients table. A recipe can have many ingredients and therefore the recipes table primary keys is also a foreign key on the ingredient_list table, with this key required (not nullable). An ingredient can be removed without affecting the recipe table, however, if a recipe is deleted the associated ingredient_list items must also be removed.
+
+
 
 
 <hr>  
