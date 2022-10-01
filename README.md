@@ -34,7 +34,7 @@ The PostgreSQL relational database management system (RDBMS) was chosen for this
     - Atomicity: database transactions are fully completed, or they fail.
     - Consistency: data consistency is ensured since changes are rolled back when a transaction fails.
     - Isolation: ensures transactions are kept separate, with previous transactions completed before the next is allowed to e processed.
-    - Durability: meaning the database can be rolled back to a previous state in the case of a server failure.
+    - Durability: meaning the database can be rolled back to a previous state in the case of a server failure.  
 
 - PostgreSQL also supports JSON and flexible text searching capability.
 
@@ -83,7 +83,7 @@ The benefits associated with ORMs include:
 
 ## R6 An ERD for your app.
 
-The Entity Relationship Diagram for the recipe API is shown below: 
+The Entity Relationship Diagram (ERD) for the recipe API is shown below: 
 
 Please note, this ERD can also be accessed online here: https://lucid.app/lucidchart/7c50beef-7db7-450e-86e9-3842b93b88d5/edit?viewport_loc=-77%2C-179%2C1729%2C1159%2C0_0&invitationId=inv_71615ea1-65e1-4a71-8844-eb8556fd56f8# 
 
@@ -96,9 +96,9 @@ Please note, this ERD can also be accessed online here: https://lucid.app/lucidc
 
 The recipe app uses data from two third party services including:
 
-- The list of recipe categories obtained from (Myfoodbook.com.au, 2022).  
+- The list of 40 recipe categories obtained from (Myfoodbook.com.au, 2022).  
 
-- The list of ingredients obtained from (Alexandra, 2018). 
+- The list of 907 ingredients obtained from (Alexandra, 2018). 
 
 The app also uses the following packages: 
 
@@ -209,7 +209,7 @@ As mentioned before, the Category model is a parent object to the Recipe object.
 
 The recipe application database relationships are outlined below.
 
-As previously mentioned, the application's database is comprised on six tables. These include:
+As previously mentioned, the application's database is comprised of six tables. These include:
 
 - Recipes 
 - Users  
@@ -218,15 +218,19 @@ As previously mentioned, the application's database is comprised on six tables. 
 - Ingredients 
 - Categories 
 
-The application effectively centres around the recipes table, which has the following implemented relationships:  
+These tables and their relationships are shown in the database modelling section of the Recipe Entity Relationship Diagram (ERD) (refer to the crow's foot diagram):
+https://lucid.app/lucidchart/7c50beef-7db7-450e-86e9-3842b93b88d5/edit?viewport_loc=-77%2C-179%2C1729%2C1159%2C0_0&invitationId=inv_71615ea1-65e1-4a71-8844-eb8556fd56f8# 
 
-- Users and recipes: The users table is associated with the recipe table in a one-to-many relationship, That primary key of the users tables is represented as a foreign key in the recipes table. This foreign key constraint is required (cannot be null) as a recipe must be owned by a user. If a user is removed from the system the associated recipes must also be removed. 
-- Ratings and recipes: The ratings table represents a linking table between recipes and users. A recipe can have many ratings and therefore the recipes table primary key is represented as a foreign key on the ratings table, with this key required (not nullable). A rating can be removed without affecting the recipes tables. 
-- Ratings and Users: Only users can rate a recipe and as such a relationship between users and ratings has been implemented in a one-to-many fashion. That is, the primary key from the users table is a foreign key constraint on the ratings table and again this is not nullable. If a user is removed from the system, then the associated ratings must also be removed. 
-- Recipes and ingredient_list: The ingredient_list table represents a linking table between the recipes and ingredients table. A recipe can have many ingredients and therefore the recipes table primary keys is also a foreign key on the ingredient_list table, with this key required (not nullable). An ingredient can be removed without affecting the recipe table, however, if a recipe is deleted the associated ingredient_list items must also be removed.
+The recipe application has the following implemented relationships:  
 
+- **Users and recipes:** The users table is associated with the recipe table in a one-to-many relationship. That is, the primary key of the users tables is represented as a foreign key in the recipes table. This foreign key constraint is required (cannot be null) as a recipe must be owned by a user. If a user is removed from the system the associated recipes must also be removed. 
+- **Ratings and recipes:** The ratings table represents a linking table between recipes and users. A recipe can have many ratings and therefore the recipes table primary key is represented as a foreign key on the ratings table, with this key required (not nullable). A rating can be removed without affecting the recipes tables. 
+- **Ratings and Users:** Only users can rate a recipe. As such a relationship between users and ratings has been implemented in a one-to-many fashion. That is, the primary key from the users table is a foreign key constraint on the ratings table and again this is not nullable. If a user is removed from the system, then the associated ratings must also be removed. 
+- **Recipes and ingredient_list:** The ingredient_list table represents a linking table between the recipes and ingredients table. A recipe can have many ingredients; therefore, the recipes table primary keys is also a foreign key on the ingredient_list table, with this key required (not nullable). An ingredient can be removed without affecting the recipe table, however, if a recipe is deleted the associated ingredient_list items must also be removed to maintain data integrity.
+- **Ingredients and ingredient_list:** As previously mentioned, the ingredient_list table is link between the recipes and ingredients tables. One ingredient can be related to many ingredient_list items. If an ingredient is removed form the database, all associated ingredient_list items must also be removed. 
+- **Categories and recipes:** The categories table shows that one category can relate to many recipes. The primary key of the categories table is represented as a foreign key in the recipes table. Note, it is not required for a recipe have a category; therefore, the category_id foreign key in the recipes table can be null. If a category is removed from the database, the associated recipes will not be removed. 
 
-
+Important note: in order to maintain data integrity in the database, a standard user is not able to add, delete or update ingredients in the ingredient table. Nor is a standard user able to add, delete or update categories in the categories table. The categories table will be preloaded with 40 unique categories. And the ingredients table is preloaded with 907 unique ingredients. Only an admin user is able to make changes to the categories tables, while the ingredients table can not be altered.
 
 <hr>  
 
